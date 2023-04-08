@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\OperatorRequest;
-use App\Models\Operators;
+use App\Http\Requests\DepartmentRequest;
+use App\Models\Departments;
 use Exception;
 use Illuminate\Http\Request;
 
-class OperatorController extends Controller
+class DepartmentController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -19,15 +19,15 @@ class OperatorController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => '',
-                'data'    => Operators::with('department')->all()   
+                'data' => Departments::all()
             ]);
         }catch(Exception $e){
             return response()->json([
                 'success' => false,
-                'message' => $e->getMessage(),   
+                'message' => $e->getMessage(),
+
             ], 400);
         }
-        
     }
 
     /**
@@ -41,21 +41,21 @@ class OperatorController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(OperatorRequest $request)
+    public function store(DepartmentRequest $request)
     {
         try{
-            $operator = Operators::create($request->all());
-            return response()->json([
-                'success' => true,
-                'message' => 'Operator has been added successfully',
-                'data'    => $operator   
-            ]);
-        }catch(Exception $e){
+            $department = Departments::create($request->all());
 
             return response()->json([
+                'success' => true,
+                'message' => 'Department has been added successfully',
+                'data' => $department
+            ]);
+        }catch(Exception $e){
+            return response()->json([
                 'success' => false,
-                'message' => $e->getMessage(),   
-            ], 400);
+                'message' => $e->getMessage()
+            ], 400);    
         }
     }
 
@@ -65,16 +65,17 @@ class OperatorController extends Controller
     public function show(string $id)
     {
         try{
-            $operators = Operators::with('department')->findOrFail($id);
+            $department = Departments::findOrFail($id);
             return response()->json([
                 'success' => true,
                 'message' => '',
-                'data' => $operators
+                'data' => $department
             ]);
         }catch(Exception $e){
             return response()->json([
                 'success' => false,
-                'message' => $e->getMessage(), 
+                'message' => $e->getMessage(),
+               
             ], 400);
         }
     }
@@ -85,16 +86,17 @@ class OperatorController extends Controller
     public function edit(string $id)
     {
         try{
-            $operators = Operators::with('depatment')->findOrFail($id);
+            $department = Departments::findOrFail($id);
             return response()->json([
                 'success' => true,
                 'message' => '',
-                'data' => $operators
+                'data' => $department
             ]);
         }catch(Exception $e){
             return response()->json([
                 'success' => false,
-                'message' => $e->getMessage(), 
+                'message' => $e->getMessage(),
+               
             ], 400);
         }
     }
@@ -102,26 +104,21 @@ class OperatorController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(OperatorRequest $request, string $id)
+    public function update(DepartmentRequest $request, string $id)
     {
         try{
-            $operatorUpdatedData = [
-                'username' => $request->username,
-                'email' => $request->email,
-                'phone_number' => $request->phone_number,
-                'role' => $request->role,
-                'department_id' => $request->department_id
-            ];
-            $operators = Operators::where('id', $id)->update($operatorUpdatedData);
+            $departmentUpdatedData = ['name' => $request->name];
+            $department = Departments::where('id', $id)->update($departmentUpdatedData);
             return response()->json([
                 'success' => true,
-                'message' => '',
-                'data' => $operators
+                'message' => 'Department has been updated successfully',
+                'data' => $department
             ]);
+
         }catch(Exception $e){
             return response()->json([
                 'success' => false,
-                'message' => $e->getMessage(), 
+                'message' => $e->getMessage(),
             ], 400);
         }
     }
@@ -132,10 +129,10 @@ class OperatorController extends Controller
     public function destroy(string $id)
     {
         try{
-            Operators::where('id', $id)->delete();
+            Departments::where('id', $id)->delete();
             return response()->json([
                 'success' => true,
-                'message' => 'Operator has been deleted',
+                'message' => 'Department has been deleted',
             ]);
         }catch(Exception $e){
             return response()->json([
