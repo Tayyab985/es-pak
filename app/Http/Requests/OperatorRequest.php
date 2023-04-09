@@ -28,7 +28,7 @@ class OperatorRequest extends FormRequest
             'phone_number' => 'required',
             'role' => 'required',
             'department_id' => 'required', 
-            'password' => 'reqired'
+            'password' => 'required'
         ];
     }
 }
