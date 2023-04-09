@@ -19,7 +19,7 @@ class OperatorController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => '',
-                'data'    => Operators::with('department')->all()   
+                'data'    => Operators::all()   
             ]);
         }catch(Exception $e){
             return response()->json([
