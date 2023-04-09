@@ -65,7 +65,7 @@ class DepartmentController extends Controller
     public function show(string $id)
     {
         try{
-            $department = Departments::findOrFail($id);
+            $department = Departments::with('operator')->findOrFail($id);
             return response()->json([
                 'success' => true,
                 'message' => '',
@@ -86,7 +86,7 @@ class DepartmentController extends Controller
     public function edit(string $id)
     {
         try{
-            $department = Departments::findOrFail($id);
+            $department = Departments::with('operator')->findOrFail($id);
             return response()->json([
                 'success' => true,
                 'message' => '',
@@ -108,11 +108,10 @@ class DepartmentController extends Controller
     {
         try{
             $departmentUpdatedData = ['name' => $request->name];
-            $department = Departments::where('id', $id)->update($departmentUpdatedData);
+            Departments::where('id', $id)->update($departmentUpdatedData);
             return response()->json([
                 'success' => true,
-                'message' => 'Department has been updated successfully',
-                'data' => $department
+                'message' => 'Department has been updated successfully'
             ]);
 
         }catch(Exception $e){
@@ -129,7 +128,7 @@ class DepartmentController extends Controller
     public function destroy(string $id)
     {
         try{
-            Departments::where('id', $id)->delete();
+            Departments::where('id', $id)->with('operator')->delete();
             return response()->json([
                 'success' => true,
                 'message' => 'Department has been deleted',

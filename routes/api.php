@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\DepartmentController;
 use App\Http\Controllers\Api\OperatorController;
 use Illuminate\Http\Request;
@@ -22,6 +23,8 @@ Route::resource('operator', OperatorController::class);
 //Departments
 Route::resource('department', DepartmentController::class);
 
+//Customer
+Route::resource('customer', CustomerController::class);
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

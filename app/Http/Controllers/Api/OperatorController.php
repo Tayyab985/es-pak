@@ -112,11 +112,10 @@ class OperatorController extends Controller
                 'role' => $request->role,
                 'department_id' => $request->department_id
             ];
-            $operators = Operators::where('id', $id)->update($operatorUpdatedData);
+            Operators::where('id', $id)->update($operatorUpdatedData);
             return response()->json([
                 'success' => true,
-                'message' => '',
-                'data' => $operators
+                'message' => 'Operater has been updated successfully'
             ]);
         }catch(Exception $e){
             return response()->json([
