@@ -112,6 +112,9 @@ class OperatorController extends Controller
                 'role' => $request->role,
                 'department_id' => $request->department_id
             ];
+            if(!empty($request->password)  || $request->password != NULL){
+                $operatorUpdatedData['password'] = $request->password;
+            }
             Operators::where('id', $id)->update($operatorUpdatedData);
             return response()->json([
                 'success' => true,
