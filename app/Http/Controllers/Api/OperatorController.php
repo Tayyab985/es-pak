@@ -115,11 +115,16 @@ class OperatorController extends Controller
             if(!empty($request->password)  || $request->password != NULL){
                 $operatorUpdatedData['password'] = $request->password;
             }
-            Operators::where('id', $id)->update($operatorUpdatedData);
+            if(Operators::where('id', $id)->update($operatorUpdatedData)){
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Operater has been updated successfully'
+                ]);
+            }
             return response()->json([
-                'success' => true,
-                'message' => 'Operater has been updated successfully'
-            ]);
+                'success' => false,
+                'message' => 'No operator needs to be updated'
+            ], 400);
         }catch(Exception $e){
             return response()->json([
                 'success' => false,

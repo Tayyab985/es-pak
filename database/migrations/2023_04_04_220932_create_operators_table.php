@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('username')->nullable();
             $table->string('email')->nullable();
-            $table->bigInteger('phone_number')->nullable();
+            $table->string('phone_number')->nullable();
             $table->string('password')->nullable();
             $table->enum('role', ['admin', 'field_officer', 'lab_sample_receiver', 'chemist', 'supervisor']);
             $table->timestamps();
