@@ -24,7 +24,7 @@ class OperatorRequest extends FormRequest
     {
         return [
             'username' => 'required',
-            'email' => 'required|unique:operators',
+            'email' => 'required|unique:operators,email', $this->id,
             'phone_number' => 'required',
             'role' => 'required',
             'department_id' => 'required'
