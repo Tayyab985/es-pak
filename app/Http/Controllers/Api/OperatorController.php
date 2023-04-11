@@ -44,7 +44,15 @@ class OperatorController extends Controller
     public function store(OperatorRequest $request)
     {
         try{
-            $operator = Operators::create($request->all());
+            $operatorData = [
+                'username' => $request->username,
+                'email' => $request->email,
+                'phone_number' => $request->phone_number,
+                'role' => $request->role,
+                'department_id' => $request->department_id,
+                'password' => bcrypt($request->password)
+            ];
+            $operator = Operators::create($operatorData);
             return response()->json([
                 'success' => true,
                 'message' => 'Operator has been added successfully',
