@@ -12,16 +12,15 @@ class Customers extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['company_name', 'company_address', 'company_phone', 'company_email', 'generated_id'];
-    protected $hidden = ['password'];
+    protected $fillable = ['company_name', 'company_address', 'company_phone', 'company_email', 'password', 'generated_id'];
 
-    public function location() : HasMany
+    public function locations() : HasMany
     {
         return $this->hasMany(Locations::class, 'customer_id', 'id');
     }
 
     public function contactPersons() : HasMany
     {
-        return $this->HasMany(ContactPerson::class, "id", "customer_id");
+        return $this->hasMany(ContactPerson::class, "customer_id", "id");
     }
 }

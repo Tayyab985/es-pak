@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CustomerRequest;
 use App\Models\Customers;
 use App\Models\Locations;
+use App\Models\ContactPerson;
 use Exception;
 use Illuminate\Http\Request;
 
@@ -20,7 +21,7 @@ class CustomerController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => '',
-                'data' => Customers::all()
+                'data' => Customers::with('locations', 'contactPersons')->get()
             ]);
         }catch(Exception $e){
             return response()->json([
@@ -44,15 +45,15 @@ class CustomerController extends Controller
     public function store(Request $request)
     {
         try{
-            foreach($request->all() as $customerKey => $cus){
+                $cus = $request->all();
                 $customerArray = [
                     'company_name' => $cus["company_name"],
                     'company_address' => $cus['company_address'],
                     'company_phone' => $cus["company_phone"],
                     'company_email' => $cus["company_email"],
-                    'generated_id' => $cus["generated_id"]
                 ];
-                $customerArray['password'] = rand(100, 10000);
+                $customerArray['generated_id'] = rand(100000, 999999);
+                $customerArray['password'] = rand(100000, 999999);
                 $customer = Customers::create($customerArray);
 
                 foreach($cus["locations"] as $locationKey => $locations){
@@ -66,12 +67,22 @@ class CustomerController extends Controller
 
                     Locations::create($location);
                 }
-            }
+
+                foreach($cus["contact_persons"] as $contactPersonKey => $contact_persons){
+                    $contactPerson = [
+                        'name' => $contact_persons["name"],
+                        'phone_number' => $contact_persons["phone_number"],
+                        'customer_id' => $customer->id
+                    ];
+
+                    ContactPerson::create($contactPerson);
+                }
+
             
             return response()->json([
                 'success' => true,
                 'message' => 'Customer has been added successfully',
-                'data' => Customers::with('location')->findOrFail($customer->id)
+                'data' => Customers::with('locations', 'contactPersons')->findOrFail($customer->id)
             ]);
         }catch(Exception $e){
             return response()->json([
@@ -89,7 +100,7 @@ class CustomerController extends Controller
     {
         try{
 
-            $customer = Customers::with('location', 'contactPersons')->findOrFail($id);
+            $customer = Customers::with('locations', 'contactPersons')->findOrFail($id);
             return response()->json([
                 'success' => true,
                 'message' => '',
@@ -110,7 +121,7 @@ class CustomerController extends Controller
     {
         try{
 
-            $customer = Customers::with('location')->findOrFail($id);
+            $customer = Customers::with('location', 'contactPersons')->findOrFail($id);
             return response()->json([
                 'success' => true,
                 'message' => '',
@@ -130,15 +141,15 @@ class CustomerController extends Controller
     public function update(Request $request, string $id)
     {
         try{
-            foreach($request->all() as $customerKey => $cus){
+                $cus = $request->all();
+
                 $customerArray = [
                     'company_name' => $cus["company_name"],
                     'company_address' => $cus['company_address'],
                     'company_phone' => $cus["company_phone"],
                     'company_email' => $cus["company_email"],
-                    'generated_id' => $cus["generated_id"]
+                    'password' => $cus["password"],
                 ];
-                $customerArray['password'] = rand(100, 10000);
                 Customers::where('id', $id)->update($customerArray);
 
                 foreach($cus["locations"] as $locationKey => $locations){
@@ -152,7 +163,25 @@ class CustomerController extends Controller
 
                     Locations::where('id', $locations['id'])->update($location);
                 }
-            }
+
+                foreach($cus["contact_persons"] as $contactPersonKey => $contact_persons){
+                    $contactPerson = [
+                        'name' => $contact_persons["name"],
+                        'phone_number' => $contact_persons["phone_number"],
+                        'customer_id' => $id
+                    ];
+
+                    ContactPerson::where('id', $contact_persons['id'])->update($contactPerson);
+                }
+            
+
+                foreach($cus["to_delete_locations"] as $locationKey => $location_id){
+                    Locations::where('id', $location_id)->delete();
+                }
+
+                foreach($cus["to_delete_contacts"] as $contactPersonKey => $contact_person_id){
+                    ContactPerson::where('id', $contact_person_id)->delete();
+                }
             
             return response()->json([
                 'success' => true,
@@ -174,7 +203,10 @@ class CustomerController extends Controller
     {
         try{
 
-            $customer = Customers::where('id', $id)->with('location')->delete();
+            $customer = Customers::findOrFail($id);
+            $customer->locations()->delete();
+            $customer->contactPersons()->delete();
+            $customer->delete();
             return response()->json([
                 'success' => true,
                 'message' => 'Customer has been deleted',
