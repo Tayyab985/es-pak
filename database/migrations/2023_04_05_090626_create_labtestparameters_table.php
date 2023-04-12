@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('method')->nullable();
             $table->string('equipment_used')->nullable();
             $table->string('uncertainity')->nullable();
-            $table->foreignId('lab_test_id')->references('id')->on('labtests')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('lab_test_id')->references('id')->on('labtests');
             $table->timestamps();
         });
     }

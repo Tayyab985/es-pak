@@ -89,7 +89,7 @@ class CustomerController extends Controller
     {
         try{
 
-            $customer = Customers::with('location')->findOrFail($id);
+            $customer = Customers::with('location', 'contactPersons')->findOrFail($id);
             return response()->json([
                 'success' => true,
                 'message' => '',

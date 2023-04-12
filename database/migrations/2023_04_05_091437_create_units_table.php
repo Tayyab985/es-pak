@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('units', function (Blueprint $table) {
             $table->id();
             $table->string('name')->nullable();
-            $table->foreignId('lab_test_parameter_id')->references('id')->on('labtestparameters')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('lab_test_parameter_id')->references('id')->on('labtestparameters');
             $table->timestamps();
         });
     }

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('customer_queries', function (Blueprint $table) {
             $table->id();
             $table->text('current_state')->nullable();
-            $table->foreignId('customer_id')->references('id')->on('customers')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('customer_id')->references('id')->on('customers');
             $table->text('lab_test_ids')->nullable();
             $table->text('operators_id')->nullable();
             $table->timestamps();
