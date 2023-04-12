@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('street2')->nullable();
             $table->string('city')->nullable();
             $table->enum('region', ['Punjab', 'Fedral', 'Sindh', 'KPK', 'Bolachistan']);
-            $table->foreignId('customer_id')->references('id')->on('customers')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('customer_id')->references('id')->on('customers');
             $table->timestamps();
         });
     }

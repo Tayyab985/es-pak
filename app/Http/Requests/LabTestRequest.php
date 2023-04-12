@@ -2,10 +2,9 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 
-class OperatorRequest extends FormRequest
+class LabTestRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,11 +22,7 @@ class OperatorRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'username' => 'required',
-            'email' => 'required',
-            'phone_number' => 'required',
-            'role' => 'required',
-            'department_id' => 'required'
+            "name" => "required"
         ];
     }
 }

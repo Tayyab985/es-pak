@@ -15,13 +15,13 @@ return new class extends Migration
             $table->id();
             $table->string('concentration')->nullable();
             $table->text('remarks')->nullable();
-            $table->foreignId('lab_test_id')->references('id')->on('labtests')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreignId('lab_test_parameter_id')->references('id')->on('labtestparameters')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreignId('customer_id')->references('id')->on('customers')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreignId('customer_query_id')->references('id')->on('customer_queries')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('lab_test_id')->references('id')->on('labtests');
+            $table->foreignId('lab_test_parameter_id')->references('id')->on('labtestparameters');
+            $table->foreignId('customer_id')->references('id')->on('customers');
+            $table->foreignId('customer_query_id')->references('id')->on('customer_queries');
             $table->text('sample_image_path')->nullable();
             $table->boolean('sample_collected')->nullable();
-            $table->foreignId('operator_id')->references('id')->on('operators')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('operator_id')->references('id')->on('operators');
             $table->timestamps();
         });
     }

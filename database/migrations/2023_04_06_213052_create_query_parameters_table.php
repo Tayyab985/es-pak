@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('query_parameters', function (Blueprint $table) {
             $table->id();
             $table->text('lab_test_parameter_ids')->nullable();
-            $table->foreignId('lab_test_id')->references('id')->on('labtests')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreignId('customer_query_id')->references('id')->on('customer_queries')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('lab_test_id')->references('id')->on('labtests');
+            $table->foreignId('customer_query_id')->references('id')->on('customer_queries');
             $table->timestamps();
         });
     }
