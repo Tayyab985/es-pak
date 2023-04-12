@@ -44,7 +44,15 @@ class OperatorController extends Controller
     public function store(OperatorRequest $request)
     {
         try{
-            $operator = Operators::create($request->all());
+            $operatorData = [
+                'username' => $request->username,
+                'email' => $request->email,
+                'phone_number' => $request->phone_number,
+                'role' => $request->role,
+                'department_id' => $request->department_id,
+                'password' => bcrypt($request->password)
+            ];
+            $operator = Operators::create($operatorData);
             return response()->json([
                 'success' => true,
                 'message' => 'Operator has been added successfully',
@@ -112,11 +120,19 @@ class OperatorController extends Controller
                 'role' => $request->role,
                 'department_id' => $request->department_id
             ];
-            Operators::where('id', $id)->update($operatorUpdatedData);
+            if(!empty($request->password)  || $request->password != NULL){
+                $operatorUpdatedData['password'] = $request->password;
+            }
+            if(Operators::where('id', $id)->update($operatorUpdatedData)){
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Operater has been updated successfully'
+                ]);
+            }
             return response()->json([
-                'success' => true,
-                'message' => 'Operater has been updated successfully'
-            ]);
+                'success' => false,
+                'message' => 'No operator needs to be updated'
+            ], 400);
         }catch(Exception $e){
             return response()->json([
                 'success' => false,

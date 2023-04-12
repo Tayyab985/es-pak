@@ -24,11 +24,10 @@ class OperatorRequest extends FormRequest
     {
         return [
             'username' => 'required',
-            'email' => 'required|unique:operators',
+            'email' => 'required',
             'phone_number' => 'required',
             'role' => 'required',
-            'department_id' => 'required', 
-            'password' => 'required'
+            'department_id' => 'required'
         ];
     }
 }
