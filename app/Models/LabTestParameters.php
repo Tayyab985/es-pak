@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class LabTestParameters extends Model
 {
@@ -17,5 +18,15 @@ class LabTestParameters extends Model
     public function labTest() : BelongsTo
     {
         return $this->belongsTo(LabTests::class, "lab_test_id", 'id');
+    }
+
+    public function units() : HasMany
+    {
+        return $this->hasMany(Units::class, 'lab_test_parameter_id', 'id');
+    }
+
+    public function limits() : HasMany
+    {
+        return $this->hasMany(LabTestParameterLimit::class, 'lab_test_parameter_id', 'id');
     }
 }

@@ -15,7 +15,7 @@ class ContactPerson extends Model
     protected $table = "contactpersons";
     protected $fillable = ['name', 'phone_number', 'customer_id'];
 
-    public function customers() : BelongsTo
+    public function customers() : HasMany
     {
         return $this->HasMany(Customers::class, 'id', 'customer_id');
     }
