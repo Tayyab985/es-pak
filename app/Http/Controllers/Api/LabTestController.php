@@ -209,7 +209,13 @@ class LabTestController extends Controller
     {
         try{
             
-            LabTests::where('id', $id)->with('labTestParameters.units', 'labTestParameters.limits')->delete();
+            $labTest = LabTests::findOrFail($id);
+            $labTest->labTestParameters()->each(function ($labTestParameter){
+                $labTestParameter->units()->delete();
+                $labTestParameter->limits()->delete();
+            });
+            $labTest->labTestParameters()->delete();
+            $labTest->delete();
             return response()->json([
                 'success' => true,
                 'message' => 'Lab Test has been deleted',
