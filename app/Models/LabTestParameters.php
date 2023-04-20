@@ -12,17 +12,12 @@ class LabTestParameters extends Model
     use HasFactory;
 
     protected $table = 'labtestparameters';
-    protected $fillable = ['name', 'method', 'equipment_used', 'uncertanity', 'lab_test_id'];
+    protected $fillable = ['name', 'method', 'equipment', 'uncertanity', 'units', 'lab_test_id'];
 
 
     public function labTest() : BelongsTo
     {
         return $this->belongsTo(LabTests::class, "lab_test_id", 'id');
-    }
-
-    public function units() : HasMany
-    {
-        return $this->hasMany(Units::class, 'lab_test_parameter_id', 'id');
     }
 
     public function limits() : HasMany

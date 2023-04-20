@@ -7,7 +7,6 @@ use App\Http\Requests\LabTestRequest;
 use App\Models\LabTestParameterLimit;
 use App\Models\LabTestParameters;
 use App\Models\LabTests;
-use App\Models\Units;
 use Exception;
 use Illuminate\Http\Request;
 
@@ -22,7 +21,7 @@ class LabTestController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => '',
-                'data' => LabTests::with('labTestParameters.units', 'labTestParameters.limits')->get()
+                'data' => LabTests::with('labTestParameters.limits')->get()
             ]);
         }catch(Exception $e){
             return response()->json([
@@ -57,19 +56,14 @@ class LabTestController extends Controller
                         $labParameterDataArray = [
                             'name' => $parameter['name'],
                             'method' => $parameter['method'],
-                            'equipment_used' => $parameter['equipment_used'],
+                            'equipment' => $parameter['equipment'],
                             'uncertainity' => $parameter['uncertanity'],
+                            'units' => $parameter['units'],
                             'lab_test_id' => $labTest->id
                         ];
     
                         $labTestParamerter = LabTestParameters::create($labParameterDataArray);
-                        if(isset($parameter['units']))
-                        {
-                            foreach($parameter['units'] as $unitKey => $unit){
-                                $unitArray = ['name' => $unit['name'], 'lab_test_parameter_id' =>  $labTestParamerter->id];
-                                Units::create($unitArray);
-                            }
-                        }
+                        
 
                         if(isset($parameter['limits']))
                         {
@@ -106,7 +100,7 @@ class LabTestController extends Controller
     public function show(string $id)
     {
         try{
-            $labTest = LabTests::with('labTestParameters.units', 'labTestParameters.limits')->findOrFail($id);
+            $labTest = LabTests::with('labTestParameters.limits')->findOrFail($id);
             return response()->json([
                 'success' => true,
                 'message' => '',
@@ -127,7 +121,7 @@ class LabTestController extends Controller
     public function edit(string $id)
     {
         try{
-            $labTest = LabTests::with('labTestParameters.units', 'labTestParameters.limits')->findOrFail($id);
+            $labTest = LabTests::with('labTestParameters.limits')->findOrFail($id);
             return response()->json([
                 'success' => true,
                 'message' => '',
@@ -158,19 +152,14 @@ class LabTestController extends Controller
                         $labParameterDataArray = [
                             'name' => $parameter['name'],
                             'method' => $parameter['method'],
-                            'equipment_used' => $parameter['equipment_used'],
+                            'equipment' => $parameter['equipment'],
                             'uncertainity' => $parameter['uncertanity'],
+                            'units' => $parameter['units'],
                             'lab_test_id' => $labTest->id
                         ];
     
                         $labTestParamerter = LabTestParameters::where('id', $parameter->id)->update($labParameterDataArray);
-                        if(isset($parameter['units']))
-                        {
-                            foreach($parameter['units'] as $unitKey => $unit){
-                                $unitArray = ['name' => $unit['name'], 'lab_test_parameter_id' =>  $labTestParamerter->id];
-                                Units::where('id', $unit->id)->update($unitArray);
-                            }
-                        }
+                       
 
                         if(isset($parameter['limits']))
                         {
@@ -211,7 +200,6 @@ class LabTestController extends Controller
             
             $labTest = LabTests::findOrFail($id);
             $labTest->labTestParameters()->each(function ($labTestParameter){
-                $labTestParameter->units()->delete();
                 $labTestParameter->limits()->delete();
             });
             $labTest->labTestParameters()->delete();
