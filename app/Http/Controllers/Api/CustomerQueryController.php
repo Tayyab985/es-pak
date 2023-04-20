@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\CustomerQueries;
-use App\Models\QueryParameters;
+use App\Models\QueryTests;
 use Exception;
 use Illuminate\Http\Request;
 
@@ -21,7 +21,7 @@ class CustomerQueryController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => "",
-                "data" => CustomerQueries::with('queryParams')->get()
+                "data" => CustomerQueries::with('queryTests')->get()
             ], 400);
         }catch(Exception $e){
             return response()->json([
@@ -48,21 +48,19 @@ class CustomerQueryController extends Controller
             foreach($request->all() as $customerQuery){
                 $customerQueryData = [
                     'customer_id' => $customerQuery['customer_id'],
-                    'lab_test_ids' => $customerQuery['lab_test_ids'],
                     'current_state' => $customerQuery['current_state'],
-                    'operators_id' => $customerQuery['operators_id']
                 ];
 
                 $customerQureyInserted = CustomerQueries::create($customerQueryData);
 
-                foreach($customerQuery['queryParameters'] as $customerQueryParams){
+                foreach($customerQuery['queryTests'] as $customerQueryTests){
                     $params = [
-                        'lab_test_id' => $customerQueryParams['lab_test_id'],
-                        'lab_test_parameter_ids' => $customerQueryParams['lab_test_parameter_ids'],
+                        'lab_test_id' => $customerQueryTests['lab_test_id'],
+                        'lab_test_parameter_ids' => $customerQueryTests['lab_test_parameter_ids'],
                         'customer_query_id' => $customerQureyInserted->id
                     ];
 
-                    QueryParameters::create($params);
+                    QueryTests::create($params);
                 }
             }
 
@@ -92,7 +90,7 @@ class CustomerQueryController extends Controller
     public function edit(string $id)
     {
         try{
-            $customerQuery = CustomerQueries::where('id', $id)->with('queryParams')->get();
+            $customerQuery = CustomerQueries::where('id', $id)->with('queryTests')->get();
             return response()->json([
                 'success' => true,
                 'message' => "",
@@ -116,21 +114,19 @@ class CustomerQueryController extends Controller
             foreach($request->all() as $customerQuery){
                 $customerQueryData = [
                     'customer_id' => $customerQuery['customer_id'],
-                    'lab_test_ids' => $customerQuery['lab_test_ids'],
                     'current_state' => $customerQuery['current_state'],
-                    'operators_id' => $customerQuery['operators_id']
                 ];
 
                 $customerQureyInserted = CustomerQueries::where('id', $id)->update($customerQueryData);
 
-                foreach($customerQuery['queryParameters'] as $customerQueryParams){
+                foreach($customerQuery['queryTests'] as $customerQueryTests){
                     $params = [
-                        'lab_test_id' => $customerQueryParams['lab_test_id'],
-                        'lab_test_parameter_ids' => $customerQueryParams['lab_test_parameter_ids'],
+                        'lab_test_id' => $customerQueryTests['lab_test_id'],
+                        'lab_test_parameter_ids' => $customerQueryTests['lab_test_parameter_ids'],
                         'customer_query_id' => $customerQureyInserted->id
                     ];
 
-                    QueryParameters::where('id', $customerQueryParams['id'])->update($params);
+                    QueryTests::where('id', $customerQueryTests['id'])->update($params);
                 }
             }
 

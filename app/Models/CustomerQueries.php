@@ -12,10 +12,10 @@ class CustomerQueries extends Model
     use HasFactory;
 
     protected $table = "customer_queries";
-    protected $fillable = ['customer_id', 'lab_test_ids', 'current_state', 'operators_id'];
+    protected $fillable = ['customer_id', 'current_state'];
 
-    public function queryParams() : HasMany
+    public function queryTests() : HasMany
     {
-        return $this->HasMany(QueryParameters::class, "customer_query_id", 'id');
+        return $this->HasMany(QueryTests::class, "customer_query_id", 'id');
     }
 }

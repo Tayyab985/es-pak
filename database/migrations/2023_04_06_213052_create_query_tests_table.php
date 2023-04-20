@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('query_parameters', function (Blueprint $table) {
+        Schema::create('query_tests', function (Blueprint $table) {
             $table->id();
             $table->text('lab_test_parameter_ids')->nullable();
             $table->foreignId('lab_test_id')->references('id')->on('labtests');
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('query_parameters');
+        Schema::dropIfExists('query_tests');
     }
 };

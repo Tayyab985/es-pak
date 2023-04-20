@@ -15,8 +15,6 @@ return new class extends Migration
             $table->id();
             $table->text('current_state')->nullable();
             $table->foreignId('customer_id')->references('id')->on('customers');
-            $table->text('lab_test_ids')->nullable();
-            $table->text('operators_id')->nullable();
             $table->timestamps();
         });
     }
