@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name')->nullable();
             $table->string('method')->nullable();
             $table->string('equipment')->nullable();
-            $table->string('uncertainity')->nullable();
+            $table->string('uncertainty')->nullable();
             $table->text('units')->nullable();
             $table->foreignId('lab_test_id')->references('id')->on('labtests');
             $table->timestamps();

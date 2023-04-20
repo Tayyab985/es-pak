@@ -12,7 +12,7 @@ class LabTestParameters extends Model
     use HasFactory;
 
     protected $table = 'labtestparameters';
-    protected $fillable = ['name', 'method', 'equipment', 'uncertanity', 'units', 'lab_test_id'];
+    protected $fillable = ['name', 'method', 'equipment', 'uncertainty', 'units', 'lab_test_id'];
 
 
     public function labTest() : BelongsTo

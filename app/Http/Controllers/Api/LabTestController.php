@@ -46,7 +46,7 @@ class LabTestController extends Controller
     public function store(Request $request)
     {
         try{
-            foreach($request->all() as $labKey => $lab){
+                $lab = $request->all();
                 $labDataArray = ['name' => $lab['name']];
                 $labTest = LabTests::create($labDataArray);
                 if(isset($lab['parameters']))
@@ -57,7 +57,7 @@ class LabTestController extends Controller
                             'name' => $parameter['name'],
                             'method' => $parameter['method'],
                             'equipment' => $parameter['equipment'],
-                            'uncertainity' => $parameter['uncertanity'],
+                            'uncertainty' => $parameter['uncertainty'],
                             'units' => $parameter['units'],
                             'lab_test_id' => $labTest->id
                         ];
@@ -81,7 +81,7 @@ class LabTestController extends Controller
                     }
                 }
                 
-            }
+       
             return response()->json([
                 'success' => true,
                 'message' => 'Lab Test has been added successfully'
@@ -142,7 +142,7 @@ class LabTestController extends Controller
     public function update(Request $request, string $id)
     {
         try{
-            foreach($request->all() as $labKey => $lab){
+                $lab = $request->all();
                 $labDataArray = ['name' => $lab['name']];
                 $labTest = LabTests::where('id', $id)->update($labDataArray);
                 if(isset($lab['parameters']))
@@ -153,7 +153,7 @@ class LabTestController extends Controller
                             'name' => $parameter['name'],
                             'method' => $parameter['method'],
                             'equipment' => $parameter['equipment'],
-                            'uncertainity' => $parameter['uncertanity'],
+                            'uncertainty' => $parameter['uncertainty'],
                             'units' => $parameter['units'],
                             'lab_test_id' => $labTest->id
                         ];
@@ -177,7 +177,7 @@ class LabTestController extends Controller
                     }
                 }
                 
-            }
+         
             return response()->json([
                 'success' => true,
                 'message' => 'Lab Test has been updated successfully'
