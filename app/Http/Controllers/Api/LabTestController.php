@@ -49,9 +49,9 @@ class LabTestController extends Controller
                 $lab = $request->all();
                 $labDataArray = ['name' => $lab['name']];
                 $labTest = LabTests::create($labDataArray);
-                if(isset($lab['parameters']))
+                if(isset($lab['lab_test_parameters']))
                 {
-                    foreach($lab['parameters'] as $parameterKey => $parameter)
+                    foreach($lab['lab_test_parameters'] as $parameterKey => $parameter)
                     {
                         $labParameterDataArray = [
                             'name' => $parameter['name'],
@@ -71,7 +71,7 @@ class LabTestController extends Controller
                                 $limitArray = [
                                     'min_value' => $limit['min_value'], 
                                     'max_value' =>  $limit['max_value'],
-                                    'limit_type_enum' => $limit['limit_type_enum'],
+                                    'limit_type' => $limit['limit_type'],
                                     'lab_test_parameter_id' => $labTestParamerter->id
                                 ];
                                 LabTestParameterLimit::create($limitArray);
@@ -145,9 +145,9 @@ class LabTestController extends Controller
                 $lab = $request->all();
                 $labDataArray = ['name' => $lab['name']];
                 $labTest = LabTests::where('id', $id)->update($labDataArray);
-                if(isset($lab['parameters']))
+                if(isset($lab['lab_test_parameters']))
                 {
-                    foreach($lab['parameters'] as $parameterKey => $parameter)
+                    foreach($lab['lab_test_parameters'] as $parameterKey => $parameter)
                     {
                         $labParameterDataArray = [
                             'name' => $parameter['name'],
@@ -167,7 +167,7 @@ class LabTestController extends Controller
                                 $limitArray = [
                                     'min_value' => $limit['min_value'], 
                                     'max_value' =>  $limit['max_value'],
-                                    'limit_type_enum' => $limit['limit_type_enum'],
+                                    'limit_type' => $limit['limit_type'],
                                     'lab_test_parameter_id' => $labTestParamerter->id
                                 ];
                                 LabTestParameterLimit::where('id', $limit->id)->update($limitArray);
@@ -176,7 +176,11 @@ class LabTestController extends Controller
                         
                     }
                 }
-                
+                foreach($lab["to_delete_parameters"] as $parameterKey => $parameter_id){
+                    $labTestParameter = LabTestParameters::findOrFail($parameter_id);
+                    $labTestParameter->limits()->delete();
+                    $labTestParameter->delete();
+                }
          
             return response()->json([
                 'success' => true,

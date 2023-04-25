@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('min_value')->nullable();
             $table->bigInteger('max_value')->nullable();
-            $table->string('limit_type_enum')->nullable();
+            $table->string('limit_type')->nullable();
             $table->foreignId('lab_test_parameter_id')->references('id')->on('labtestparameters');
             $table->timestamps();
         });

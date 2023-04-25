@@ -11,7 +11,7 @@ class LabTestParameterLimit extends Model
     use HasFactory;
 
     protected $table = 'lab_test_paramter_limits';
-    protected $fillable = ['min_value', 'max_value', 'limit_type_enum', 'lab_test_parameter_id'];
+    protected $fillable = ['min_value', 'max_value', 'limit_type', 'lab_test_parameter_id'];
 
     public function labTestParameter() : BelongsTo
     {
