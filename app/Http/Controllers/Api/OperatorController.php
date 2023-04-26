@@ -41,7 +41,7 @@ class OperatorController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(OperatorRequest $request)
+    public function store(Request $request)
     {
         try{
             $operatorData = [
@@ -110,7 +110,7 @@ class OperatorController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(OperatorRequest $request, string $id)
+    public function update(Request $request, string $id)
     {
         try{
             $operatorUpdatedData = [

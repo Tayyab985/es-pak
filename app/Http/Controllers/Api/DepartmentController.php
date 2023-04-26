@@ -41,7 +41,7 @@ class DepartmentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(DepartmentRequest $request)
+    public function store(Request $request)
     {
         try{
             $department = Departments::create($request->all());
@@ -104,7 +104,7 @@ class DepartmentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(DepartmentRequest $request, string $id)
+    public function update(Request $request, string $id)
     {
         try{
             $departmentUpdatedData = ['name' => $request->name];
