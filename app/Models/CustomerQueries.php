@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Hashing\HashManager;
+use Illuminate\Support\Facades\Hash;
 
 class CustomerQueries extends Model
 {
@@ -23,5 +25,15 @@ class CustomerQueries extends Model
     public function customer() : BelongsTo
     {
         return $this->belongsTo(Customers::class, 'customer_id', 'id');
+    }
+
+    public function operatorsWorked() : BelongsToMany
+    {
+        return $this->BelongsToMany(OperatorsWorked::class, 'customer_query_id', 'id');
+    }
+
+    public function queryResults() : BelongsToMany
+    {
+        return $this->belongsToMany(QueryResutls::class, 'customer_query_id', 'id');
     }
 }

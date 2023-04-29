@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\CustomerQueries;
+use App\Models\OperatorsWorked;
+use App\Models\QueryResutls;
 use App\Models\QueryTests;
 use Exception;
 use Illuminate\Http\Request;
@@ -81,7 +83,19 @@ class CustomerQueryController extends Controller
      */
     public function show(string $id)
     {
-        //
+        try{
+            $customerQuery = CustomerQueries::where('id', $id)->with('queryTests', 'operatorsWorked', 'queryResults')->get();
+            return response()->json([
+                'success' => true,
+                'message' => "",
+                "data" => $customerQuery
+            ]);
+        }catch(Exception $e){
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 400);
+        }
     }
 
     /**
@@ -90,7 +104,7 @@ class CustomerQueryController extends Controller
     public function edit(string $id)
     {
         try{
-            $customerQuery = CustomerQueries::where('id', $id)->with('queryTests')->get();
+            $customerQuery = CustomerQueries::where('id', $id)->with('queryTests', 'operatorsWorked', 'queryResults')->get();
             return response()->json([
                 'success' => true,
                 'message' => "",
@@ -119,7 +133,7 @@ class CustomerQueryController extends Controller
 
                 $customerQureyInserted = CustomerQueries::where('id', $id)->update($customerQueryData);
 
-                foreach($customerQuery['queryTests'] as $customerQueryTests){
+                foreach($customerQuery['queryParameters'] as $customerQueryTests){
                     $params = [
                         'lab_test_id' => $customerQueryTests['lab_test_id'],
                         'lab_test_parameter_ids' => $customerQueryTests['lab_test_parameter_ids'],
@@ -128,6 +142,50 @@ class CustomerQueryController extends Controller
 
                     QueryTests::where('id', $customerQueryTests['id'])->update($params);
                 }
+
+                foreach($customerQuery['operators_id'] as $operatorId){
+                    if(isset($operatorId->id)){
+                        $params = [
+                            'operator_id' => $operatorId->operator_id,
+                            'role' => $operatorId->role,
+                            'customer_query_id' => $customerQureyInserted->id
+                        ];
+    
+                        OperatorsWorked::where('id', $operatorId->id)->update($params);
+                    }else{
+                        $params = [
+                            'operator_id' => $operatorId->operator_id,
+                            'role' => $operatorId->role,
+                            'customer_query_id' => $customerQureyInserted->id
+                        ];
+    
+                        OperatorsWorked::create($params);
+                    }
+                }
+
+                foreach($customerQuery['results'] as $queryResult){
+                    $params = [
+                        "concentration" => $queryResult->concentration,
+                        "remarks" => $queryResult->remarks,
+                        "lab_test_id" => $queryResult->lab_test_id,
+                        "lab_test_parameter_id" => $queryResult->lab_test_parameter_id,
+                        "customer_id" => $queryResult->customer_id,
+                        "customer_query_id" => $queryResult->customer_query_id,
+                        "sample_image_path" => $queryResult->sample_image_path,
+                        "sample_collected" => $queryResult->sample_collected,
+                        "operator_id" => $queryResult->operator_id
+                    ];
+                    if(isset($queryResult->id)){
+                        QueryResutls::where('id', $queryResult->id)->update($params);
+                    }else{
+                        QueryResutls::create($params);
+                    }
+                }
+            }
+
+            foreach($lab["to_delete_query_tests"] as $queryTestKey => $test_id){
+                $queryTest = QueryTests::findOrFail($test_id);
+                $queryTest->delete();
             }
 
             foreach($lab["to_delete_query_tests"] as $queryTestKey => $test_id){
