@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ContactPersonController;
 use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\CustomerQueryController;
@@ -19,6 +20,9 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+
+// Auth
+Route::resource('auth', AuthController::class);
 
 //Operator
 Route::resource('operator', OperatorController::class);
