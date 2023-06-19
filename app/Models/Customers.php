@@ -23,4 +23,9 @@ class Customers extends Model
     {
         return $this->hasMany(ContactPerson::class, "customer_id", "id");
     }
+
+    public function customerQueries() : HasMany
+    {
+        return $this->hasMany(CustomerQueries::class, "customer_id", "id");
+    }
 }

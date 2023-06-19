@@ -155,10 +155,10 @@ class LabTestController extends Controller
                             'equipment' => $parameter['equipment'],
                             'uncertainty' => $parameter['uncertainty'],
                             'units' => $parameter['units'],
-                            'lab_test_id' => $labTest->id
+                            'lab_test_id' => $parameter['lab_test_id']
                         ];
     
-                        $labTestParamerter = LabTestParameters::where('id', $parameter->id)->update($labParameterDataArray);
+                        $labTestParamerter = LabTestParameters::where('id', $parameter['id'])->update($labParameterDataArray);
                        
 
                         if(isset($parameter['limits']))
@@ -168,9 +168,13 @@ class LabTestController extends Controller
                                     'min_value' => $limit['min_value'], 
                                     'max_value' =>  $limit['max_value'],
                                     'limit_type' => $limit['limit_type'],
-                                    'lab_test_parameter_id' => $labTestParamerter->id
+                                    'lab_test_parameter_id' => $parameter['id']
                                 ];
-                                LabTestParameterLimit::where('id', $limit->id)->update($limitArray);
+                                if(isset($limit['id'])){
+                                    LabTestParameterLimit::where('id', $limit['id'])->update($limitArray);
+                                }else{
+                                    LabTestParameterLimit::create($limitArray);
+                                }
                             }
                         }
                         

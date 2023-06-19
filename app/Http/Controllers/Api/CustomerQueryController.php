@@ -21,8 +21,8 @@ class CustomerQueryController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => "",
-                "data" => CustomerQueries::with('queryTests')->get()
-            ], 400);
+                "data" => CustomerQueries::with('customer', 'queryTests')->get()
+            ]);
         }catch(Exception $e){
             return response()->json([
                 'success' => false,
@@ -67,7 +67,7 @@ class CustomerQueryController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => "Query has been saved successfully"
-            ], 400); 
+            ]); 
         }catch(Exception $e){
             return response()->json([
                 'success' => false,
@@ -95,7 +95,7 @@ class CustomerQueryController extends Controller
                 'success' => true,
                 'message' => "",
                 "data" => $customerQuery
-            ], 400);
+            ]);
         }catch(Exception $e){
             return response()->json([
                 'success' => false,
@@ -130,10 +130,15 @@ class CustomerQueryController extends Controller
                 }
             }
 
+            foreach($lab["to_delete_query_tests"] as $queryTestKey => $test_id){
+                $queryTest = QueryTests::findOrFail($test_id);
+                $queryTest->delete();
+            }
+
             return response()->json([
                 'success' => true,
                 'message' => "Query has been updated successfully"
-            ], 400); 
+            ]); 
         }catch(Exception $e){
             return response()->json([
                 'success' => false,
@@ -147,6 +152,20 @@ class CustomerQueryController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try{
+
+            $customerQuery = CustomerQueries::findOrFail($id);
+            $customer->queryTests()->delete();
+            $customerQuery->delete();
+            return response()->json([
+                'success' => true,
+                'message' => 'Customer Query has been deleted',
+            ]);
+        }catch(Exception $e){
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 400); 
+        }
     }
 }
