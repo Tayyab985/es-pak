@@ -27,13 +27,13 @@ class CustomerQueries extends Model
         return $this->belongsTo(Customers::class, 'customer_id', 'id');
     }
 
-    public function operatorsWorked() : BelongsToMany
+    public function operatorsWorked() : HasMany
     {
-        return $this->BelongsToMany(OperatorsWorked::class, 'customer_query_id', 'id');
+        return $this->hasMany(OperatorsWorked::class, "customer_query_id", "id");
     }
 
-    public function queryResults() : BelongsToMany
+    public function queryResults() : HasMany
     {
-        return $this->belongsToMany(QueryResults::class, 'customer_query_id', 'id');
+        return $this->hasMany(QueryResults::class, 'customer_query_id', 'id');
     }
 }

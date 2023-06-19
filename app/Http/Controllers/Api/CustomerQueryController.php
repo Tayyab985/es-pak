@@ -124,7 +124,6 @@ class CustomerQueryController extends Controller
     public function update(Request $request, string $id)
     {
         try{
-            
             foreach($request->all() as $customerQuery){
                 $customerQueryData = [
                     'customer_id' => $customerQuery['customer_id'],
@@ -133,60 +132,65 @@ class CustomerQueryController extends Controller
 
                 $customerQureyInserted = CustomerQueries::where('id', $id)->update($customerQueryData);
 
-                foreach($customerQuery['queryParameters'] as $customerQueryTests){
+                foreach($customerQuery['queryTests'] as $customerQueryTests){
                     $params = [
                         'lab_test_id' => $customerQueryTests['lab_test_id'],
                         'lab_test_parameter_ids' => $customerQueryTests['lab_test_parameter_ids'],
-                        'customer_query_id' => $customerQureyInserted->id
+                        'customer_query_id' => $id
                     ];
 
                     QueryTests::where('id', $customerQueryTests['id'])->update($params);
                 }
 
-                foreach($customerQuery['operators_worked'] as $operatorId){
-                    if(isset($operatorId->id)){
-                        $params = [
-                            'operator_id' => $operatorId->operator_id,
-                            'role' => $operatorId->role,
-                            'customer_query_id' => $customerQureyInserted->id
-                        ];
-    
-                        OperatorsWorked::where('id', $operatorId->id)->update($params);
-                    }else{
-                        $params = [
-                            'operator_id' => $operatorId->operator_id,
-                            'role' => $operatorId->role,
-                            'customer_query_id' => $customerQureyInserted->id
-                        ];
-    
-                        OperatorsWorked::create($params);
+                if(isset($customerQuery['operators_worked'])){
+                    foreach($customerQuery['operators_worked'] as $operatorWorked){
+                        if(isset($operatorWorked->id)){
+                            $params = [
+                                'operator_id' => $operatorWorked->operator_id,
+                                'role' => $operatorWorked->role,
+                                'customer_query_id' => $id
+                            ];
+        
+                            OperatorsWorked::where('id', $operatorWorked->id)->update($params);
+                        }else{
+                            $params = [
+                                'operator_id' => $operatorWorked->operator_id,
+                                'role' => $operatorWorked->role,
+                                'customer_query_id' => $customerQureyInserted->id
+                            ];
+        
+                            OperatorsWorked::create($params);
+                        }
                     }
                 }
 
-                foreach($customerQuery['results'] as $queryResult){
-                    $params = [
-                        "concentration" => $queryResult->concentration,
-                        "remarks" => $queryResult->remarks,
-                        "lab_test_id" => $queryResult->lab_test_id,
-                        "lab_test_parameter_id" => $queryResult->lab_test_parameter_id,
-                        "customer_id" => $queryResult->customer_id,
-                        "customer_query_id" => $queryResult->customer_query_id,
-                        "sample_image_path" => $queryResult->sample_image_path,
-                        "sample_collected" => $queryResult->sample_collected,
-                        "operator_id" => $queryResult->operator_id
-                    ];
-                    if(isset($queryResult->id)){
-                        QueryResults::where('id', $queryResult->id)->update($params);
-                    }else{
-                        QueryResults::create($params);
+                if(isset($customerQuery['results'])){
+                    foreach($customerQuery['results'] as $queryResult){
+                        $params = [
+                            "concentration" => $queryResult->concentration,
+                            "remarks" => $queryResult->remarks,
+                            "lab_test_id" => $queryResult->lab_test_id,
+                            "lab_test_parameter_id" => $queryResult->lab_test_parameter_id,
+                            "customer_id" => $queryResult->customer_id,
+                            "customer_query_id" => $queryResult->customer_query_id,
+                            "sample_image_path" => $queryResult->sample_image_path,
+                            "sample_collected" => $queryResult->sample_collected,
+                            "operator_id" => $queryResult->operator_id
+                        ];
+                        if(isset($queryResult->id)){
+                            QueryResults::where('id', $queryResult->id)->update($params);
+                        }else{
+                            QueryResults::create($params);
+                        }
                     }
                 }
+                foreach($customerQuery["to_delete_query_tests"] as $queryTestKey => $test_id){
+                    $queryTest = QueryTests::findOrFail($test_id);
+                    $queryTest->delete();
+                }
+
             }
 
-            foreach($lab["to_delete_query_tests"] as $queryTestKey => $test_id){
-                $queryTest = QueryTests::findOrFail($test_id);
-                $queryTest->delete();
-            }
 
 
             return response()->json([

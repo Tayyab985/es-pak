@@ -155,10 +155,15 @@ class LabTestController extends Controller
                             'equipment' => $parameter['equipment'],
                             'uncertainty' => $parameter['uncertainty'],
                             'units' => $parameter['units'],
-                            'lab_test_id' => $parameter['lab_test_id']
+                            'lab_test_id' => $id
                         ];
+
+                        if(isset($parameter['lab_test_id'])){
+                            LabTestParameters::where('id', $parameter['id'])->update($labParameterDataArray);
+                        }else{
+                            LabTestParameters::create($labParameterDataArray);
+                        }
     
-                        $labTestParamerter = LabTestParameters::where('id', $parameter['id'])->update($labParameterDataArray);
                        
 
                         if(isset($parameter['limits']))

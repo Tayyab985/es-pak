@@ -15,8 +15,8 @@ class OperatorsWorked extends Model
 
     protected $fillable = ['operator_id', 'role', 'customer_query_id'];
 
-    public function customers() : BelongsToMany
+    public function customers() : BelongsTo
     {
-        return $this->BelongsToMany(CustomerQueries::class, 'customer_query_id', 'id');
+        return $this->belongsTo(CustomerQueries::class, 'customer_query_id', 'id');
     }
 }
