@@ -188,10 +188,6 @@ class CustomerQueryController extends Controller
                 $queryTest->delete();
             }
 
-            foreach($lab["to_delete_query_tests"] as $queryTestKey => $test_id){
-                $queryTest = QueryTests::findOrFail($test_id);
-                $queryTest->delete();
-            }
 
             return response()->json([
                 'success' => true,
