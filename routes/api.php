@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\CustomerQueryController;
 use App\Http\Controllers\Api\DepartmentController;
 use App\Http\Controllers\Api\LabTestController;
 use App\Http\Controllers\Api\OperatorController;
+use App\Http\Controllers\Api\QueryResultController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -41,4 +42,7 @@ Route::resource('lab-test', LabTestController::class);
 
 //Cusomer Queries
 Route::resource('customer-query', CustomerQueryController::class);
+
+//Cusomer Queries Results
+Route::resource('query-result', QueryResultController::class);
 

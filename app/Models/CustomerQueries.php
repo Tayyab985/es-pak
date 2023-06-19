@@ -34,6 +34,6 @@ class CustomerQueries extends Model
 
     public function queryResults() : BelongsToMany
     {
-        return $this->belongsToMany(QueryResutls::class, 'customer_query_id', 'id');
+        return $this->belongsToMany(QueryResults::class, 'customer_query_id', 'id');
     }
 }

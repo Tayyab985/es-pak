@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\QueryResults;
 
 class QueryResultController extends Controller
 {
@@ -13,8 +14,20 @@ class QueryResultController extends Controller
      */
     public function index()
     {
-        //
+        try{
+            return response()->json([
+                'success' => true,
+                'message' => "",
+                "data" => QueryResults::get()
+            ]);
+        }catch(Exception $e){
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 400);
+        }
     }
+
 
     /**
      * Show the form for creating a new resource.

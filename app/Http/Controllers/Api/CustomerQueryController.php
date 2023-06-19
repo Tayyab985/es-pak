@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\CustomerQueries;
 use App\Models\OperatorsWorked;
-use App\Models\QueryResutls;
+use App\Models\QueryResults;
 use App\Models\QueryTests;
 use Exception;
 use Illuminate\Http\Request;
@@ -143,7 +143,7 @@ class CustomerQueryController extends Controller
                     QueryTests::where('id', $customerQueryTests['id'])->update($params);
                 }
 
-                foreach($customerQuery['operators_id'] as $operatorId){
+                foreach($customerQuery['operators_worked'] as $operatorId){
                     if(isset($operatorId->id)){
                         $params = [
                             'operator_id' => $operatorId->operator_id,
@@ -176,9 +176,9 @@ class CustomerQueryController extends Controller
                         "operator_id" => $queryResult->operator_id
                     ];
                     if(isset($queryResult->id)){
-                        QueryResutls::where('id', $queryResult->id)->update($params);
+                        QueryResults::where('id', $queryResult->id)->update($params);
                     }else{
-                        QueryResutls::create($params);
+                        QueryResults::create($params);
                     }
                 }
             }
