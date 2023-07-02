@@ -17,4 +17,9 @@ class LabTests extends Model
     {
         return $this->hasMany(LabTestParameters::class, "lab_test_id", 'id');
     }
+
+    public function queryTests() : HasMany
+    {
+        return $this->HasMany(QueryTests::class, "lab_test_id", 'id');
+    }
 }

@@ -21,7 +21,7 @@ return new class extends Migration
             $table->foreignId('customer_query_id')->references('id')->on('customer_queries');
             $table->text('sample_image_path')->nullable();
             $table->boolean('sample_collected')->nullable();
-            $table->foreignId('operator_id')->references('id')->on('operators');
+            $table->foreignId('operator_id')->nullable()->references('id')->on('operators');
             $table->timestamps();
         });
     }

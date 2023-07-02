@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\DepartmentController;
 use App\Http\Controllers\Api\LabTestController;
 use App\Http\Controllers\Api\OperatorController;
 use App\Http\Controllers\Api\QueryResultController;
+use App\Http\Controllers\Api\FileUploadController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -46,3 +47,5 @@ Route::resource('customer-query', CustomerQueryController::class);
 //Cusomer Queries Results
 Route::resource('query-result', QueryResultController::class);
 
+//File Upload
+Route::resource('upload', FileUploadController::class);
