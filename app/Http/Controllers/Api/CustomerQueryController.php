@@ -23,7 +23,7 @@ class CustomerQueryController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => "",
-                "data" => CustomerQueries::with('customer', 'customer.contactPersons', 'queryTests', 'operatorsWorked', 'queryResults')->get()
+                "data" => CustomerQueries::with('customer', 'customer.contactPersons', 'queryTests', 'queryTests.labTest', 'operatorsWorked', 'queryResults', 'queryResults.operator')->get()
             ]);
         }catch(Exception $e){
             return response()->json([
@@ -84,7 +84,7 @@ class CustomerQueryController extends Controller
     public function show(string $id)
     {
         try{
-            $customerQuery = CustomerQueries::where('id', $id)->with('customer', 'customer.contactPersons', 'queryTests', 'queryTests.labTest', 'operatorsWorked', 'queryResults')->get();
+            $customerQuery = CustomerQueries::where('id', $id)->with('customer', 'customer.contactPersons', 'queryTests', 'queryTests.labTest', 'operatorsWorked', 'queryResults', 'queryResults.operator')->get();
             return response()->json([
                 'success' => true,
                 'message' => "",
@@ -104,7 +104,7 @@ class CustomerQueryController extends Controller
     public function edit(string $id)
     {
         try{
-            $customerQuery = CustomerQueries::where('id', $id)->with('customer', 'queryTests', 'operatorsWorked', 'queryResults')->get();
+            $customerQuery = CustomerQueries::where('id', $id)->with('customer', 'customer.contactPersons', 'queryTests', 'queryTests.labTest', 'operatorsWorked', 'queryResults', 'queryResults.operator')->get();
             return response()->json([
                 'success' => true,
                 'message' => "",

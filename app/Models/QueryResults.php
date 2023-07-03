@@ -20,4 +20,9 @@ class QueryResults extends Model
      {
         return $this->belongsTo(CustomerQueries::class, 'customer_query_id', 'id');
      }
+
+     public function operator() : BelongsTo
+     {
+        return $this->belongsTo(Operators::class, 'operator_id', 'id');
+     }
 }
