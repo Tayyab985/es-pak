@@ -10,7 +10,7 @@ class Operators extends Model
 {
     use HasFactory;
 
-     protected $fillable = ['username', 'email', 'phone_number', 'department_id', 'password', 'permissions'];
+     protected $fillable = ['username', 'email', 'phone_number', 'department_id', 'password', 'permissions', 'admin'];
      protected $hidden = ['password'];
 
    public function department() : BelongsTo

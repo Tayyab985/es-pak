@@ -213,7 +213,7 @@ class CustomerQueryController extends Controller
         try{
 
             $customerQuery = CustomerQueries::findOrFail($id);
-            $customer->queryTests()->delete();
+            $customerQuery->queryTests()->delete();
             $customerQuery->delete();
             return response()->json([
                 'success' => true,

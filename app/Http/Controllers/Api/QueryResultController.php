@@ -52,7 +52,8 @@ class QueryResultController extends Controller
                 'customer_id' => $request->customer_id,
                 'customer_query_id' => $request->customer_query_id,
                 'sample_image_path' => $request->sample_image_path,
-                'sample_collected' => $request->sample_collected
+                'sample_collected' => $request->sample_collected,
+                'operator_id' => $request->operator_id
             ];
             $result = QueryResults::create($resultData);
             return response()->json([
@@ -76,7 +77,21 @@ class QueryResultController extends Controller
      */
     public function show(string $id)
     {
-        //
+        
+        try{
+            $result = QueryResults::findOrFail($id);
+            return response()->json([
+                'success' => true,
+                'message' => '',
+                'data' => $result
+            ]);
+        }catch(Exception $e){
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+               
+            ], 400);
+        }
     }
 
     /**
@@ -101,7 +116,8 @@ class QueryResultController extends Controller
                 'customer_id' => $request->customer_id,
                 'customer_query_id' => $request->customer_query_id,
                 'sample_image_path' => $request->sample_image_path,
-                'sample_collected' => $request->sample_collected
+                'sample_collected' => $request->sample_collected,
+                'operator_id' => $request->operator_id
             ];
 
             if(QueryResults::where('id', $id)->update($resultUpdateData)){

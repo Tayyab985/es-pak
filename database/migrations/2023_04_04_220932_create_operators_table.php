@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('phone_number')->nullable();
             $table->string('password')->nullable();
             $table->enum('role', ['admin', 'field_officer', 'lab_sample_receiver', 'chemist', 'supervisor']);
+            $table->boolean('admin')->nullable();
             $table->timestamps();
 
         });

@@ -42,7 +42,7 @@ class FileUploadController extends Controller
             $file->move(public_path('uploads'), $filename);
 
             // Get the URL to access the uploaded file
-            $fileUrl = url('uploads/' . $filename);
+            $fileUrl = 'uploads/' . '.' . $filename;
 
             return response()->json(['url' => $fileUrl, 'message' => 'File uploaded successfully']);
         }

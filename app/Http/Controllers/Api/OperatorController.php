@@ -50,7 +50,8 @@ class OperatorController extends Controller
                 'phone_number' => $request->phone_number,
                 'department_id' => $request->department_id,
                 'password' => bcrypt($request->password),
-                'permissions' => $request->permissions
+                'permissions' => $request->permissions,
+                'admin' => $request->admin
             ];
             $operator = Operators::create($operatorData);
             return response()->json([
@@ -118,7 +119,8 @@ class OperatorController extends Controller
                 'email' => $request->email,
                 'phone_number' => $request->phone_number,
                 'department_id' => $request->department_id,
-                'permissions' => $request->permissions
+                'permissions' => $request->permissions,
+                'admin' => $request->admin
             ];
             if(!empty($request->password)  || $request->password != NULL){
                 $operatorUpdatedData['password'] = bcrypt($request->password);
